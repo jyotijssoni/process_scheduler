@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>CPU Scheduling Simulator</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <h2>CPU Scheduling Simulator</h2>
+
+  <form id="process-form">
+    <input type="text" id="pid" placeholder="Process ID" required>
+    <input type="number" id="burst" placeholder="Burst Time" required>
+    <input type="number" id="arrival" placeholder="Arrival Time">
+    <button type="submit">Add Process</button>
+  </form>
+
+  <div class="controls">
+    <label>Algorithm:
+      <select id="algo">
+        <option value="fifo">FIFO</option>
+        <option value="rr">Round Robin</option>
+      </select>
+    </label>
+
+    <label id="quant">Quantum (for RR):
+      <input type="number" id="quantum" placeholder="Time Quantum">
+    </label>
+
+    <button id="run-btn">Run</button>
+  </div>
+
+  <div id="output"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
