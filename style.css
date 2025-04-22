@@ -31,30 +31,21 @@ h3 {
   margin: 0 auto 20px;
 }
 
-form {
+form, .controls {
   display: flex;
   flex-direction: row;
   gap: 15px;
 }
-.controls{
-  display:flex;
-  flex-direction: row;
-  gap:15px;
+
+#algo, #quant {
+  flex: 2 1 50px;
 }
-#algo
-{
-  flex:2 1 50px;
-}
-#quant
-{
-  flex:2 1 50px;
-}
-#run-btn{
-  flex:1 1 30px;
+
+#run-btn {
+  flex: 1 1 30px;
   height: 40px;
   margin-top: 20px;
 }
-
 
 input, select, button {
   padding: 10px;
@@ -69,7 +60,6 @@ input:focus, select:focus {
   border-color: #007bff;
 }
 
-
 button {
   background-color: #007bff;
   color: white;
@@ -83,7 +73,6 @@ button:hover {
   background-color: #102fb6;
 }
 
-
 #output ul {
   padding-left: 20px;
 }
@@ -92,26 +81,46 @@ button:hover {
   margin-bottom: 6px;
 }
 
+/* Gantt chart styles */
 .gantt-chart {
   display: flex;
-  flex-wrap: wrap;
-  align-items: flex-end;
-  gap: 10px;
+  flex-direction: column;
+  gap: 20px;
   margin-top: 25px;
-  border-top: 2px solid #ddd;
   padding-top: 20px;
+  border-top: 2px solid #ddd;
 }
 
+.gantt-cpu {
+  margin-bottom: 10px;
+}
+
+.gantt-cpu-header {
+  font-weight: bold;
+  margin-bottom: 8px;
+  color: #222;
+}
+
+/* Align CPU rows to the left, no scrolling */
+.gantt-row {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 5px;
+  padding-bottom: 10px;
+  /* Removed overflow-x: auto */
+}
+
+/* Gantt block styles for each process */
 .gantt-block {
   position: relative;
   background-color: #4dabf7;
-  margin-top: 25px;
   color: #fff;
   padding: 10px 5px;
   border-radius: 5px;
   font-weight: bold;
   text-align: center;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
   min-width: 40px;
 }
 
@@ -135,7 +144,6 @@ button:hover {
   bottom: -18px;
   right: 0;
 }
-
 
 @media (max-width: 600px) {
   .gantt-block {

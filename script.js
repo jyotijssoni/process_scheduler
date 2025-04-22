@@ -36,6 +36,9 @@ runBtn.addEventListener('click', () => {
   } else if (algo === 'rr') {
     timeline = roundRobinScheduling([...processes], quantum, numCpus);
   }
+  else if (algo === 'sjf') {
+    timeline = shortestJobFirst([...processes], numCpus);
+  }
 
   clearTimeline();
   const chart = renderGanttChart(timeline, numCpus);
@@ -60,6 +63,33 @@ function displayProcesses() {
 // FIFO Scheduling with Parallel CPUs
 function fifoScheduling(proc, numCpus) {
   proc.sort((a, b) => a.arrival - b.arrival);
+  let timeline = Array(numCpus).fill().map(() => []);
+  let time = 0;
+
+  while (proc.length > 0) {
+    let scheduled = false;
+
+    for (let i = 0; i < numCpus && proc.length > 0; i++) {
+      let cpuTimeline = timeline[i];
+      let cpuTime = cpuTimeline.length > 0 ? cpuTimeline[cpuTimeline.length - 1].end : 0;
+      let currentTime = Math.max(cpuTime, time);
+
+      let idx = proc.findIndex(p => p.arrival <= currentTime);
+      if (idx !== -1) {
+        let p = proc.splice(idx, 1)[0];
+        cpuTimeline.push({ pid: p.pid, start: currentTime, end: currentTime + p.burst });
+        scheduled = true;
+      }
+    }
+
+    if (!scheduled) time++; // wait if nothing was scheduled
+  }
+
+  return timeline;
+}
+
+function shortestJobFirst(proc, numCpus) {
+  proc.sort((a, b) => a.arrival - b.arrival|| a.burst-b.burst);
   let timeline = Array(numCpus).fill().map(() => []);
   let time = 0;
 
@@ -143,16 +173,22 @@ function renderGanttChart(timeline, numCpus) {
   let chartHTML = `<div class="gantt-chart">`;
 
   for (let cpu = 0; cpu < numCpus; cpu++) {
-    chartHTML += `<div class="gantt-cpu" style="margin-bottom: 20px;">
-                    <div class="gantt-cpu-header">CPU ${cpu + 1}</div>`;
+    chartHTML += `
+      <div class="gantt-cpu">
+        <div class="gantt-cpu-header">CPU ${cpu + 1}</div>
+        <div class="gantt-row">`;
+
     timeline[cpu].forEach(block => {
-      chartHTML += `<div class="gantt-block" style="width:${(block.end - block.start) * 40}px;">
-                      ${block.pid}
-                      <span class="left">${block.start}</span>
-                      <span class="right">${block.end}</span>
-                    </div>`;
+      const width = (block.end - block.start) * 40;
+      chartHTML += `
+        <div class="gantt-block" style="width: ${width}px;">
+          ${block.pid}
+          <span class="left">${block.start}</span>
+          <span class="right">${block.end}</span>
+        </div>`;
     });
-    chartHTML += `</div>`;
+
+    chartHTML += `</div></div>`;
   }
 
   chartHTML += `</div>`;
