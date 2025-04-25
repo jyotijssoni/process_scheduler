@@ -9,13 +9,14 @@ form.addEventListener('submit', (e) => {
   const pid = document.getElementById('pid').value.trim();
   const burst = parseInt(document.getElementById('burst').value);
   const arrival = parseInt(document.getElementById('arrival').value || 0);
+  const priority= parseInt(document.getElementById('priority').value|| Infinity);
 
   if (!pid || isNaN(burst) || burst <= 0) {
     alert("Please enter valid PID and Burst Time.");
     return;
   }
 
-  processes.push({ pid, burst, arrival });
+  processes.push({ pid, burst, arrival,priority});
   form.reset();
   displayProcesses();
 });
@@ -54,7 +55,9 @@ function displayProcesses() {
 
   let list = "<h3><br>Processes:</h3><ul>";
   processes.forEach(p => {
-    list += `<li> ${p.pid} =>  Burst : ${p.burst} ,  Arrival : ${p.arrival}</li>`;
+    list += `<li> ${p.pid} =>  Burst : ${p.burst} ,  Arrival : ${p.arrival} ,` +
+        (p.priority !== Infinity ? ` , Priority : ${p.priority}` : 'NA') +
+        `</li>`;
   });
   list += "</ul>";
   output.innerHTML = list;
@@ -62,7 +65,13 @@ function displayProcesses() {
 
 // FIFO Scheduling with Parallel CPUs
 function fifoScheduling(proc, numCpus) {
-  proc.sort((a, b) => a.arrival - b.arrival);
+   proc.sort((a, b) => {
+     if (a.arrival !== b.arrival) {
+        return a.arrival - b.arrival; 
+     } else {
+        return a.priority - b.priority;
+     }
+   });
   let timeline = Array(numCpus).fill().map(() => []);
   let time = 0;
 
@@ -74,7 +83,7 @@ function fifoScheduling(proc, numCpus) {
       let cpuTime = cpuTimeline.length > 0 ? cpuTimeline[cpuTimeline.length - 1].end : 0;
       let currentTime = Math.max(cpuTime, time);
 
-      let idx = proc.findIndex(p => p.arrival <= currentTime);
+      let idx = proc.findIndex(p => p.arrival <= currentTime );
       if (idx !== -1) {
         let p = proc.splice(idx, 1)[0];
         cpuTimeline.push({ pid: p.pid, start: currentTime, end: currentTime + p.burst });
@@ -170,7 +179,7 @@ function roundRobinScheduling(proc, quantum, numCpus) {
 
 // Gantt Chart Renderer
 function renderGanttChart(timeline, numCpus) {
-  let chartHTML = `<div class="gantt-chart">`;
+    let chartHTML = `<div class="gantt-chart">`;
 
   for (let cpu = 0; cpu < numCpus; cpu++) {
     chartHTML += `
