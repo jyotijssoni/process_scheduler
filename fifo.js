@@ -1,4 +1,4 @@
-// FIFO Scheduling with Parallel CPUs
+
 function fifoScheduling(proc, numCpus) {
     proc.sort((a, b) => {
       if (a.arrival !== b.arrival) {

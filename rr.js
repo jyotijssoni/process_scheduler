@@ -1,4 +1,4 @@
-// Round Robin Scheduling with Parallel CPUs
+
 function roundRobinScheduling(proc, quantum, numCpus) {
     let time = 0;
     let timeline = Array(numCpus).fill().map(() => []);

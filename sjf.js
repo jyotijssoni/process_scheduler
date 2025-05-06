@@ -1,4 +1,4 @@
-// Shortest Job First with Parallel CPUs
+
 function shortestJobFirst(proc, numCpus) {
     let timeline = Array(numCpus).fill().map(() => []);
     let time = 0;
