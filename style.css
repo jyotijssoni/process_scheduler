@@ -90,7 +90,6 @@ button:hover {
   margin-bottom: 6px;
 }
 
-/* Gantt chart styles */
 .gantt-chart {
   display: flex;
   flex-direction: column;
@@ -110,17 +109,14 @@ button:hover {
   color: #222;
 }
 
-/* Align CPU rows to the left, no scrolling */
 .gantt-row {
   display: flex;
   justify-content: flex-start;
   align-items: center;
   gap: 5px;
   padding-bottom: 10px;
-  /* Removed overflow-x: auto */
 }
 
-/* Gantt block styles for each process */
 .gantt-block {
   position: relative;
   background-color: #4dabf7;
